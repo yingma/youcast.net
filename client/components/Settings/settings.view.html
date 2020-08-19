@@ -1,0 +1,147 @@
+<form name="settings" ng-init="load()">
+    <div id="setting-selection">
+        <div ng-form="settingform">
+            <h2>Account Settings</h2>
+            <span class="right margin-top-10" ng-if="!setting.edit"><a href="" ng-click="editSetting()">Edit</a></span>
+            <hr>
+            <div class="list list-inset" id="room-id-input-div" ng-show="!setting.edit">
+                <div>
+                    <label>
+                        <span>Password</span>:
+                    </label>
+                    <span>*****</span>
+                </div>
+            </div>
+            <div class="list list-inset" id="room-id-input-div" ng-if="setting.edit">
+                <div>
+                    <input type="Password" name="oldpassword" id="oldpassword" autofocus ng-model="setting.oldPassword" ng-change="onChangeSetting" style="width: 25em" placeholder="Old Password" required>
+                </div>
+                <div>
+                    <input type="password" name="newpassword" id="newpassword" ng-model="setting.newPassword" ng-change="onChangeSetting" style="width: 25em" placeholder="New Password" required>
+                </div>
+            </div>
+            <div class="alert alert-danger" ng-show="error.message">
+                {{ error.message }}
+            </div>
+            <div id="room-id-input-buttons" ng-if="setting.edit">
+                <button ng-click="updatePassword()" ng-disabled="settingform.$invalid"><span>Update</span></button>
+                <a href="" ng-click="cancelEditSetting()"><span>Cancel</span></a>
+            </div>
+            <div ng-if="data-loading">
+                Loading...
+            </div>
+        </div>
+        <div ng-form="contactform">
+            <h2>Contact Information</h2>
+            <span class="right margin-top-10" ng-if="!contact.edit"><a href="" ng-click="editContact()">Edit</a></span>
+            <hr>
+            <div class="alert alert-info" ng-show="loading">Loading</div>
+            <div class="list list-inset" id="room-id-input-div" ng-show="!contact.edit">
+                <div>
+                    <label>
+                        <span>Name</span>:
+                    </label>
+                    <span>{{ user.name }}</span>
+                </div>
+                <div>
+                    <label>
+                        <span>Mobile Phone</span>:
+                    </label>
+                    <span>{{ user.phone }}</span>
+                    <img src="images/checkmark.png" ng-show="user.verified" alt="Verified">
+                    <a href="" ng-click="updatePhone()" ng-show="!user.verified && user.phone"><img src="images/verify.png" alt="To verify your phone"></a>
+                </div>
+                <div>
+                    <label>
+                        <span>Address</span>:
+                    </label>
+                    <span>{{ user.address }}</span>
+                </div>
+                <div>
+                    <label>
+                        <span>City</span>:
+                    </label>
+                    <span>{{ user.city }}</span>
+                </div>
+                <div>
+                    <label>
+                        <span>State</span>:
+                    </label>
+                    <span>{{ user.state }}</span>
+                </div>
+                <div>
+                    <label>
+                        <span>Zip</span>:
+                    </label>
+                    <span>{{ user.zip }}</span>
+                </div>
+                <div>
+                    <label>
+                        <span>Country</span>:
+                    </label>
+                    <span>{{ user.country }}</span>
+                </div>
+                <div custom-checkbox>
+                    <label>
+                        <span>Browser Push</span>:
+                    </label>
+                    <input type="checkbox" disabled ng-model="isSubscribed">
+                </div>
+            </div>
+            <div class="list list-inset" id="room-id-input-div" ng-if="contact.edit">
+                <div>
+                    <label class="item item-input">
+                        <input type="text" name="name" id="name" autofocus ng-model="contact.name" ng-change="onChangeContact()" style="width: 25em" placeholder="Name" required>
+                    </label>
+                </div>
+                <div>
+                    <label class="item item-input">
+                        <span><font color="red">country code</font> (e.g. 1 for US) + <font color="blue">area code</font> + local number</span>
+                        <input type="text" name="phone" id="phone" ng-model="contact.phone" ng-change="onChangePhone()" placeholder="e.g 12124567889" style="width: 25em" ng-maxlength="15" required>
+                    </label>
+                </div>
+                <div>
+                    <label class="item item-input">
+                        <input type="text" name="address" id="address" ng-model="contact.address" ng-change="onChangeContact()" style="width: 25em" placeholder="Address" required>
+                    </label>
+                </div>
+                <div>
+                    <label class="item item-input">
+                        <input type="text" name="city" id="city" ng-model="contact.city" ng-change="onChangeContact()" style="width: 25em" placeholder="City" required>
+                    </label>
+                </div>
+                <div>
+                    <label class="item item-input">
+                        <input type="text" name="state" id="state" ng-model="contact.state" ng-change="onChangeContact()" style="width: 25em" placeholder="State" required>
+                    </label>
+                </div>
+                 <div>
+                    <label class="item item-input">
+                        <input type="text" name="zip" id="zip" ng-model="contact.zip" ng-change="onChangeContact()" style="width: 25em" placeholder="Zip code" required>
+                    </label>
+                </div>
+                <div>
+                    <label class="item item-input">
+                        <input type="text" name="country" id="country" ng-model="contact.country" ng-change="onChangeContact()" style="width: 25em" placeholder="Country" required>
+                    </label>
+                </div>
+                <div>
+                    <label class="item item-input">
+                        Browser Push&nbsp;
+                        <input type="checkbox" name="browser" id="browser" ng-model="isSubscribed" ng-click="onTogglePush()" ng-disabled="disablePush" ng-change="onChangeContact()">
+                    </label>
+                </div>
+            </div>
+            <div class="alert alert-danger" ng-show="error.message1">
+                {{ error.message1 }}
+            </div>
+            <div id="room-id-input-buttons" ng-if="contact.edit">
+                <button ng-click="updateContact()" ng-disabled="contactform.$invalid || !contact.changed"><span>Update</span></button>
+                <a href="" ng-click="cancelEditContact()"><span>Cancel</span></a>
+            </div>
+            <div ng-if="data-loading">
+                Loading...
+            </div>
+        </div>
+    </div>
+</form>

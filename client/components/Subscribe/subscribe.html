@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html ng-app="starter.subscribe">
+<head>
+  <base href=".">
+  <meta charset="utf-8">
+  <meta name="description" content="Youcast Pro">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <meta itemprop="description" content="Whiteboard application using webrtc technology">
+  <meta itemprop="image" content="images/webrtc-icon-192x192.png">
+  <meta itemprop="name" content="AppRTC">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta id="theme-color" name="theme-color" content="#1e1e1e">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-cookies.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-route.min.js"></script>
+  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="../../../pro/vendor/aws/aws-sdk-2.4.9.min.js"></script>
+
+
+  <script src="../../../pro/vendor/intlTelInput/intlTelInput.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/utils.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/ng-intl-tel-input.module.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/ng-intl-tel-input.provider.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/ng-intl-tel-input.directive.js"></script>
+  <script src="../../../pro/vendor/ng-drag-scroll/ng-drag-scroll.min.js"></script>
+
+  <script src="../../js/environment-dev.js"></script>
+  <script src="../../js/events.js"></script>
+  <script src="../Services/awsAPIGateway1.service.js"></script>
+  <script src="subscribe.controller.js"></script>
+
+  <link rel="stylesheet" href="../../../pro/vendor/intlTelInput/css/intlTelInput.css">
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="data:;base64,=">
+  <link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="subscribe.css" type="text/css" media="screen" charset="utf-8">
+</head>
+<body>
+
+<!-- Page Content -->
+<!-- views will be injected here -->
+<form name="subscribeForm" ng-controller="subscribeCtrl">
+    <div id="room-selection" style="width: 350px;">
+      <p id="instructions">Please enter your contact and comment.</p>
+      <div>
+        <div id="room-id-input-div">
+            <input type="text" id="name" name="name" ng-model="name" placeholder="Your Name">
+            <input type="text" id="telephone" name="telephone" ng-model="number" ng-intl-tel-input>
+            <label class="error-label" for="telephone" ng-show="subscribeForm.telephone.$invalid && subscribeForm.telephone.$touched">Invalid Phone Number</label>
+            <input type="email" id="email" name="email" ng-model="email" placeholder="sample@mail.com">
+            <label class="error-label" for="email" ng-show="subscribeForm.email.$invalid && subscribeForm.email.$touched">Invalid Email</label>
+            <br>
+            <textarea id="message" name="message" rows="4" cols="50" ng-model="message" placeholder="Message to leave..." required></textarea>
+            <br>
+            <a ng-click="attach()" ng-show="canAddFile"><img src="../../images/camera.png" border="0" alt="attach"></a>
+            <div class="flex-container" style="left: 50px; width: 500px">
+              <div drag-scroll="true" ng-show="snapshots.length > 0" style="height: 130px; " class="row row--x">
+                  <div ng-repeat="image in snapshots track by $index" style="position: relative; min-width: 120px;">
+                      <img ng-src="{{image.thumbnail}}" style="position: absolute;">
+                      <span style="position: relative; top: 5px; z-index: 3;">
+                        <a ng-click="deleteImage($index)">
+                            <img src="../../images/delete1.png" border="0" alt="delete">
+                        </a>
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <label class="error-label" for="message" ng-show="subscribeForm.message.$touched && subscribeForm.message.$invalid">Message cannot be empty</label>
+            <h1 ng-show="key">Send message successfully, please close the window</h1>
+
+            <div class="padding">
+              <div class="alert alert-danger" ng-show="error.message">
+                {{ error.message }}
+              </div>
+            </div>
+        </div>
+  
+        <div id="room-id-input-buttons">
+            <button ng-disabled="subscribeForm.$invalid" id="send-button" ng-click="send()">Send</button>
+        </div>
+        <div ng-if="data-loading">
+            Loading...
+        </div>
+    </div>
+</form>
+<!-- End Content -->
+
+<!-- Footer -->
+<footer>
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Copyright &copy; Youcast.net 2018</p>
+    </div>
+  </div>
+  <!-- /.container -->
+</footer>
+
+</body>
+</html>

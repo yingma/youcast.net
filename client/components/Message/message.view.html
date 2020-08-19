@@ -1,0 +1,106 @@
+<div class="form-inline my-2 my-lg-0" data-ng-init="onload()">
+
+	<div class="alert alert-info" ng-show="loading">Loading...</div>
+    <!-- Page header -->
+    <div id="room-id-input-buttons" class="pull-right">
+    	<button ng-click="goback()">Back</button>
+    	<button ng-click="compose()"><i class="glyphicon glyphicon-comment"></i> Reply</button>
+    	<button ng-click="delete()" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</span></button>
+    </div>
+
+    <!-- Page header -->
+	<div id="setting-selection">
+        <h2>{{name}} <small>{{user}}</small></h2>
+    </div>
+    <!-- /Page header -->
+
+    <!-- Timeline -->
+    <div class="timeline">
+    
+        <!-- Line component -->
+        <div ng-repeat="item in itemFilter = (items | limitTo:numberToDisplay) track by $index">
+        	<!-- Line component -->
+			<div class="line text-muted" ng-if="isNumber(item)"></div>
+
+			<!-- Separator -->
+			<div class="separator text-muted" ng-if="isNumber(item)">
+			    <time>{{formatDate(item)}}</time>
+			</div>
+			<!-- /Separator -->
+
+			<!-- Panel -->
+			<article class="panel panel-danger panel-outline" ng-if="isSystem(item)">
+
+			    <!-- Icon -->
+			    <div class="panel-heading icon">
+			        <i class="glyphicon glyphicon-ok-sign"></i>
+			    </div>
+			    <!-- /Icon -->
+
+			    <!-- Body -->
+			    <div class="panel-body">
+			        <strong>Me</strong> {{item.data}}.
+			    </div>
+			    <!-- /Body -->
+
+			</article>
+			<!-- /Panel -->
+
+			<!-- Panel -->
+			<article class="panel panel-default panel-outline" ng-if="isImage(item)" ng-click="click(item)">
+
+			    <!-- Icon -->
+			    <div class="panel-heading icon">
+			        <i class="glyphicon glyphicon-picture"></i>
+			    </div>
+			    <!-- /Icon -->
+
+			    <!-- Body -->
+			    <div class="panel-body">
+			        <img class="img-responsive" ng-src="{{item.data}}" ng-class="{highlight:isNew(item)}" alt="snapshots"/>
+			    </div>
+			    <!-- /Body -->
+
+			</article>
+			<!-- /Panel -->
+
+			<!-- Panel -->
+			<article ng-class="{'c':'panel panel-primary', 'u':'panel panel-success'}[item.mtype]" ng-if="isText(item)">
+
+			    <!-- Icon -->
+			    <div class="panel-heading icon">
+			        <i class="glyphicon glyphicon-plus"></i>
+			    </div>
+			    <!-- /Icon -->
+
+			    <!-- Heading -->
+			    <div class="panel-heading">
+			        <h2 class="panel-title" ng-if="item.mtype==='c'">{{name}}</h2>
+			        <h2 class="panel-title" ng-if="item.mtype==='u'">Myself</h2>
+			        wrote:
+			    </div>
+			    <!-- /Heading -->
+
+			    <!-- Body -->
+			    <div class="panel-body">
+			    	<span ng-style="{true: {'font-weight':'bold'}, false: {}}[isNew(item)]">
+		                {{item.data}}
+		            </span>
+			    </div>
+			    <!-- /Body -->
+
+			    <!-- Footer -->
+			    <div class="panel-footer">
+			        <small>{{formatTime(item.time)}}</small>
+			    </div>
+			    <!-- /Footer -->
+
+			</article>
+			<!-- /Panel -->
+        </div>        
+    
+    </div>
+    <!-- /Timeline -->
+
+</div>
+

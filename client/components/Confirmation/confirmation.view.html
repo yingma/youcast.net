@@ -1,0 +1,39 @@
+<form name="verif" ng-submit="verifyCode()" ng-init="setUserNameIfExists()">
+    <div id="room-selection" style="width: 350px;">
+      <p id="instructions">Please check your email for verification code</p>
+      <div class="list list-inset" id="room-id-input-div">
+        <label class="item item-input">
+          <input ng-hide="user.exists" type="text" name="username" ng-model="user.name"
+            placeholder="Username"
+            required>
+        </label>
+        <label class="item item-input">
+        <input type="text" name="code" ng-model="user.code"
+          placeholder="Code" required>
+        </label>
+        <div ng-messages="verif.username.$error" ng-if="verif.username.$touched" style="color:red">
+          <p ng-message="required">* Username is required</p>
+        </div>
+
+        <div ng-messages="verif.code.$error" ng-if="verif.code.$touched" style="color:red">
+          <p ng-message="required">* Code is required</p>
+        </div>
+        <div class="alert alert-danger" ng-show="error.message">
+          {{ error.message }}
+        </div>
+        <div id="room-id-input-buttons">
+          <button
+            type="button"
+            ng-click="verifyCode()"
+            ng-disabled="verif.$invalid || !verif.code.$modelValue">
+            <span>Verify code</span>
+          </button>
+          <button
+            type="button"
+            ng-click="resendCode()">
+            <span>Resend code</span>
+          </button>
+        </div>
+      </div>
+    </div>
+</form>

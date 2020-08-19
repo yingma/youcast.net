@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href=".">
+    <meta charset="utf-8">
+    <meta name="description" content="Youcast app">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta id="theme-color" name="theme-color" content="#1e1e1e">
+
+    <title>Youcast Plus</title>
+
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-cookies.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-messages.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/angular-toastr@2/dist/angular-toastr.tpls.js"></script>
+
+    <!-- AWS SDK and dependencies -->
+	<script src="../pro/vendor/aws/dependencies/jsbn.js"></script>
+    <script src="../pro/vendor/aws/dependencies/jsbn2.js"></script>
+	<script src="../pro/vendor/aws/dependencies/sjcl.js"></script>
+	<script src="../pro/vendor/aws/dependencies/moment.min.js"></script>
+    <script src="../pro/vendor/aws/aws-sdk-2.4.9.min.js"></script>
+    <script src="../pro/vendor/aws/aws-cognito-sdk.min.js "></script>
+    <script src="../pro/vendor/aws/amazon-cognito.min.js"></script>
+    <script src="../pro/vendor/aws/amazon-cognito-identity.min.js"></script>
+    <script src="../pro/vendor/aws/aws-dynamodb-sdk.min.js"></script>
+    <script src="../pro/vendor/angular-recaptcha/angular-recaptcha.min.js"></script>
+    <script src="../pro/vendor/ng-infinite-scroll/ng-infinite-scroll.min.js"></script>
+
+    <!-- the app's js -->
+    <script src="../pro/vendor/qrcode.js"></script>
+    <script src="../pro/vendor/angular-qr.js"></script>
+    <script src="../pro/vendor/intlTelInput/intlTelInput.js"></script>
+    <script src="../pro/vendor/intlTelInput/utils.js"></script>
+    <script src="../pro/vendor/intlTelInput/ng-intl-tel-input.module.js"></script>
+    <script src="../pro/vendor/intlTelInput/ng-intl-tel-input.provider.js"></script>
+    <script src="../pro/vendor/intlTelInput/ng-intl-tel-input.directive.js"></script>
+
+    <script src="js/environment-dev.js"></script>
+    <script src="js/util.js"></script>
+    <script src="components/Factories/awsCognitoIdentity.factory.js"></script>
+    <script src="components/Factories/awsCognitoSync.factory.js"></script>
+    <script src="components/Home/home.controller.js"></script>
+    <script src="components/Login/login.controller.js"></script>
+    <script src="components/Forgot/forgot.controller.js"></script>
+    <script src="components/Services/awsAPIGateway.service.js"></script>
+    <script src="components/Register/register.controller.js"></script>
+    <script src="components/Confirmation/confirmation.controller.js"></script>
+    <script src="components/Header/header.controller.js"></script>
+    <script src="components/Settings/settings.controller.js"></script>
+    <script src="components/Sidebar/sidebar.controller.js"></script>
+    <script src="components/Room/room.controller.js"></script>
+    <script src="components/Message/inbox.controller.js"></script>
+    <script src="components/Message/message.controller.js"></script>
+    <script src="components/Team/team.controller.js"></script>
+    <script src="components/Team1/team.controller.js"></script>
+
+    <script src="js/app.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/angular-toastr@2/dist/angular-toastr.css">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="../pro/vendor/intlTelInput/css/intlTelInput.css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
+
+    <style type="text/css" media="screen">
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    </style>
+
+  </head>
+  <body ng-app="starter">
+    <!-- Main Content -->
+    <div class="wrapper" id="main" >
+        <!-- Navigation -->
+        <div style="height: 50px">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="HeaderCtrl" ng-init="init()">
+                <div ng-include="headerUrl" class="container"></div>
+                <!-- /.container -->
+            </nav>
+        </div>
+        <div style="height: calc((100vh - 50px) - 30px);display:flex;">
+            <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
+            <nav id="sidebar" ng-controller="SidebarCtrl" role="navigation" ng-include="sidebarUrl" ng-init="init()" ng-class="{'active': isCollapsed()}">
+            </nav>
+            <div ui-view="content" class="center" style="overflow: auto"></div>
+        </div>
+        <div id="footer" style="height: 30px;">
+            <span>Copyright ©youcast</span>
+        </div>
+    </div>
+    <iframe class="hidden photoswipe" id="photoswipe" height="100%" />
+    <!-- End Content -->
+  </body>
+</html>

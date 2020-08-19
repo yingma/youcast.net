@@ -1,0 +1,91 @@
+<form name="roomForm" id="room">
+    <div id="setting-selection" data-ng-init="onload()">    
+        <h2 ng-if="!room.Id">New Room</h2>
+        <h2 ng-if="room.Id">Room Settings</h2>
+        <div id="room-id-input-buttons" class="pull-right">
+          <button ng-click="saveRoom()" ng-disabled="roomForm.$invalid || !room.changed" title="Save settings"><span>Save</span></button>
+          <button ng-click="linkRoom(room.Id)" ng-if="room.Id" ng-disabled="!room.Id" title="Popup embeded html snippet"><span>Embed</span></button>
+          <button ng-click="enterRoom()" ng-if="room.Id" class="btn btn-success" title="Enter room directly"><span>Enter</span></button>
+          <button ng-click="deleteRoom()" ng-if="room.Id" class="btn btn-danger" title="Delete room"><span>Delete</span></button>
+        </div>
+        <hr>
+        <div class="alert alert-info" ng-show="loading">Processing...</div>
+        <div class="list list-inset" id="room-id-input-div" required>
+                <div>
+                    <label class="item item-input">
+                        <h4>Drop logo image file here</h4>
+                        <drag-drop-canvas id="logo" width="150" height="150"></drag-drop-canvas>
+                        <a ng-click="onResetLogo()" ng-show="logo"><img src="images/refresh.png" title="Reset logo" alt="Reset logo icon" border="0"></a>
+                    </label>
+                </div>
+                <div>
+                    <label class="item item-input">
+                        <input type="text" name="name" id="name" ng-model="room.name" ng-change="onChange()" style="width: 25em" title="Room name" placeholder="Name" required>
+                    </label>
+                </div>
+                <br>                
+                <div>
+                    <label class="item item-input">
+                        <input type="text" name="description" id="description" ng-model="room.description" ng-change="onChange()" style="width: 60em" placeholder="Description" title="Room description" required>
+                    </label>
+                </div>
+                <br>                
+                <div>
+                <select class="form-control" id="resolutionSelect" ng-model="room.resolution" ng-change="onChange()" title="Room resolution" required>
+                    <option selected value="">Choose resolution....</option>
+                    <option value="VGA">VGA 640x480(recommanded)</option>
+                    <option value="HD">HD 1280x720</option>
+                    <option value="AUTO">Auto</option>
+                </select>
+                </div>
+                <br>
+                <div>
+                <select class="form-control" id="notifyType" ng-model="room.notify" ng-change="onChange()" required>
+                    <option selected value="">Choose notify type....</option>
+                    <option value="Random">Randomly pick free one</option>
+                    <option value="All">All member</option>
+                </select>
+                </div>
+                <br>
+                <div>
+                <select class="form-control" id="typeSelect" ng-model="room.type" ng-disabled="room.Id" ng-change="onChange()" title="Role of room owner" required>
+                    <option selected value="">Choose type ...</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Support">Support</option>
+                </select>
+                </div>
+                <div ng-if="room.type==='Sales'">
+                    <img src="images/step1.png">
+                    <img src="images/arrow.png">
+                    <img src="images/step2.png">
+                    <p>Sales role to show to your client</p>
+                </div>
+                <div ng-if="room.type==='Support'">
+                    <img src="images/step3.png">
+                    <img src="images/arrow.png">
+                    <img src="images/step4.png">
+                    <p>Support role to let your client show</p>
+                </div>
+                <br>
+                <div>
+                <select class="form-control" id="maxPartySelect" ng-model="room.maxparty" ng-change="onChange()" required>
+                    <option selected value="">Choose max number of people in the room ...</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                </div>
+                <br>
+            <div class="alert alert-danger" ng-show="error.message">
+                {{ error.message1 }}
+            </div>
+            <div id="room-id-input-buttons" ng-if="contact.edit">
+                <button ng-click="updateContact()" ng-disabled="roomForm.$invalid || !room.changed"><span>Update</span></button>
+                <a href="" ng-click="cancelEditContact()"><span>Cancel</span></a>
+            </div>
+      <!--       <div ng-if="data-loading">
+                Loading...
+            </div> -->  
+        </div>
+    </div>
+</form>

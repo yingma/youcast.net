@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html ng-app="starter.invite">
+<head>
+  <base href=".">
+  <meta charset="utf-8">
+  <meta name="description" content="Youcast Pro">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <meta itemprop="description" content="Whiteboard application using webrtc technology">
+  <meta itemprop="image" content="images/webrtc-icon-192x192.png">
+  <meta itemprop="name" content="Ring">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta id="theme-color" name="theme-color" content="#1e1e1e">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-cookies.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-route.min.js"></script>
+  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/angular-toastr@2/dist/angular-toastr.tpls.js"></script>
+  
+  <script src="../../../pro/vendor/intlTelInput/intlTelInput.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/utils.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/ng-intl-tel-input.module.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/ng-intl-tel-input.provider.js"></script>
+  <script src="../../../pro/vendor/intlTelInput/ng-intl-tel-input.directive.js"></script>
+
+  <script src="../../../pro/vendor/aws/dependencies/jsbn.js"></script>
+  <script src="../../../pro/vendor/aws/dependencies/jsbn2.js"></script>
+  <script src="../../../pro/vendor/aws/dependencies/sjcl.js"></script>
+  <script src="../../../pro/vendor/aws/dependencies/moment.min.js"></script>
+  <script src="../../../pro/vendor/aws/aws-sdk-2.4.9.min.js"></script>
+  <script src="../../../pro/vendor/aws/aws-cognito-sdk.min.js "></script>
+  <script src="../../../pro/vendor/aws/amazon-cognito.min.js"></script>
+  <script src="../../../pro/vendor/aws/amazon-cognito-identity.min.js"></script>
+
+  <script src="../../js/environment-dev.js"></script>
+  <script src="../Services/awsAPIGateway.service.js"></script>
+  <script src="../Factories/awsCognitoIdentity.factory.js"></script>
+
+
+  
+  <script src="invite.controller.js"></script>
+
+  <link rel="stylesheet" href="../../../pro/vendor/intlTelInput/css/intlTelInput.css">
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="data:;base64,=">
+  <link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" charset="utf-8">
+  
+  <style type="text/css" media="screen">
+  body {
+      margin: 0;
+      padding: 0;
+  }
+  </style>
+</head>
+<body>
+
+<div id="user-selection" data-ng-init="onload()" ng-controller="inviteCtrl" >
+    <h3> Invite other team member</h3>
+    <table class="table table-striped table-condensed table-hover table-responsive">
+        <thead style="background-color:silver;">
+                <th class="name">Name<a ng-click="sort_by('name', '0')">
+                    <i ng-class="sortingOrder==='name' && reverse?'icon-chevron-up':sortingOrder==='name' && !reverse?'icon-chevron-down':'icon-sort'"></i></a></th>
+                <th class="email">Email<a ng-click="sort_by('email', '0')">
+                    <i ng-class="sortingOrder==='email' && reverse?'icon-chevron-up':sortingOrder==='email' && !reverse?'icon-chevron-down':'icon-sort'"></i></a></th>
+                <th class="number">Phone<a ng-click="sort_by('number', '0')">
+                    <i ng-class="sortingOrder==='number' && reverse?'icon-chevron-up':sortingOrder==='number' && !reverse?'icon-chevron-down':'icon-sort'"></i></a></th>
+                <th class="busy"></th>
+                <th class="invite"></th>
+            </tr>
+        </thead>
+        <tbody class="scroll">
+            <tr ng-repeat="item in team | orderBy:sortingOrder:reverse">
+                <td style="vertical-align: middle;">{{item.Name}}</td>
+                <td style="vertical-align: middle;">{{item.Email}}</td>
+                <td style="vertical-align: middle;min-width: 200px;">{{item.Phone}}</td>
+                <td><span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Busy now" ng-show="Meetings.length"><i class="glyphicon glyphicon-earphone"></i></span></td>
+                <td>
+                    <button type="button" class="btn btn-link" ng-click="notify(item.Id)">Invite</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Share to phone:
+                </td>
+                <td colspan="2">  
+                    <form  name="subscribeForm">
+                        <input type="text" id="telephone" name="telephone" ng-model="number" ng-intl-tel-input> 
+                        <label class="error-label" for="telephone" ng-show="subscribeForm.telephone.$invalid && subscribeForm.telephone.$touched">Invalid Phone Number</label>		
+                    </form>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-link" ng-click="notify1()" ng-disabled="!number">Invite</button>             
+                </td>
+            </tr>
+        </tbody>
+        <tfoot ng-if="!team || team.length === 0" style="background-color:white;">
+            <tr>
+                <td colspan='5' ng-switch on="busy">
+                    <div ng-switch-when="true">
+                        Loading data...
+                    </div>
+                    <div ng-switch-default>
+                        No other team member found.
+                    </div>
+                    <div class="alert alert-danger" ng-show="error.message">
+                        {{ error.message }}
+                    </div>  
+                </td>
+            </div>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+</body>
+</html>
+
+ 

@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.flex-container {
+    position: relative;
+    top: -64px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.flex-container .row {
+    display: flex;
+    overflow: hidden;
+    background-color: white;
+    padding: 15px;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: grab;
+}
+
+.flex-container .row--x {
+    max-width: 800px;
+    width: 90%;
+    height: 150px;
+}
+
+.flex-container .row--y {
+    display: block;
+    height: 90%;
+    width: 150px;
+}
+
+.flex-container .row--xy {
+    width: 90%;
+    height: 90%;
+}

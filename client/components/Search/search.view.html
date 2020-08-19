@@ -1,0 +1,79 @@
+<form class="form-inline my-2 my-lg-0">
+    <div id="setting-selection" data-ng-init="loadMore()">    
+        <h2>Inbox</h2>
+        <label style="width:60%;">
+        <input class="ml-sm-4" type="text" placeholder="Search name or email or number" data-ng-model="query" width="70%">
+        </label>
+        <button class="btn btn-primary my-2 my-sm-0" type=submit ng-click="search()"><i class="fa fa-search" aria-hidden="true">Search</i></button>
+    </div>
+</form>
+<script type="text/javascript">
+    var sortingOrder = 'name';
+</script>
+<div id="column-left">
+    <div data-ng-show="subscribers.length === 0 && !busy">
+        <td class="center" colspan="3">No subscriber is here</td>
+    </div>
+    <div class="input-append">
+        <input type="text" ng-model="query" ng-change="search()" class="input-large search-query" placeholder="Search">
+    <span class="add-on"><i class="icon-search"></i></span>
+    </div>
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="id"></th>
+                <th class="name">Name&nbsp;<a ng-click="sort_by('name')"><i class="icon-sort"></i></a></th>
+                <th class="email">Email&nbsp;<a ng-click="sort_by('email')"><i class="icon-sort"></i></a></th>
+                <th class="number">Number&nbsp;<a ng-click="sort_by('number')"><i class="icon-sort"></i></a></th>
+                <th class="city">City&nbsp;<a ng-click="sort_by('city')"><i class="icon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tfoot>
+        </tfoot>
+        <tbody infinite-scroll="loadMore()" infinite-scroll-disabled='busy' infinite-scroll-distance="1">
+            <tr ng-repeat="item in users | orderBy:sortingOrder:reverse">
+                <td><input id="checkUser" type="checkbox" ng-checked="Selected"></td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Email}}</td>
+                <td>{{item.Number}}</td>
+                <td>{{item.City}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div id="column-center" >
+    <div class="buttoncolumn">
+        <button class="btn btn-link" role="link" ng-click="addTeam()">
+            Add
+        </button>
+         <button class="btn btn-link" role="link" ng-click="removeTeam()">
+            Remove
+        </button>
+    </div>
+</div>
+<div id="column-right" data-ng-init="init()">
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="id"></th>
+                <th class="name">Name&nbsp;<a ng-click="sort_by('name')"><i class="icon-sort"></i></a></th>
+                <th class="email">Email&nbsp;<a ng-click="sort_by('email')"><i class="icon-sort"></i></a></th>
+                <th class="number">Number&nbsp;<a ng-click="sort_by('number')"><i class="icon-sort"></i></a></th>
+                <th class="city">City&nbsp;<a ng-click="sort_by('city')"><i class="icon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tfoot>
+        </tfoot>
+        <tbody>
+            <tr ng-repeat="item in team | orderBy:sortingOrder:reverse">
+                <td><input id="checkUser" type="checkbox" ng-checked="Selected"></td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Email}}</td>
+                <td>{{item.Number}}</td>
+                <td>{{item.City}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+

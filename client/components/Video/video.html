@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html ng-app="webrtc">
+
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Video  Sharing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-route.min.js"></script>
+    <script src="../../../pro/vendor/paper/dist/paper-core.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../pro/vendor/adapter.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="constants.js" type="text/javascript" charset="utf-8"></script>
+    <script src="sdputils.js" type="text/javascript" charset="utf-8"></script>
+    <script src="signalingchannel.js" type="text/javascript" charset="utf-8"></script>
+    <script src="peerconnectionclient.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../../js/events.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/environment-dev.js"></script>
+    <script src="../../js/util.js"></script>
+    <script src="../../../pro/vendor/aws/aws-sdk-2.4.9.min.js"></script>
+    <script src="../Services/awsAPIGateway1.service.js"></script>
+    <script src="call.js" type="text/javascript" charset="utf-8"></script>
+    <script src="video.js" type="text/javascript" charset="utf-8"></script>
+    <script src="opentok-whiteboard.js" type="text/javascript" charset="utf-8"></script>
+    <script src="windowport.js" type="text/javascript" charset="utf-8"></script>
+    <script src="events.js" type="text/javascript" charset="utf-8"></script>
+    <link href="../../../pro/vendor/flexslider/flexslider.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/video.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="../../css/opentok-whiteboard.css" type="text/css" media="screen" charset="utf-8">
+<!--     <link rel="stylesheet" href="../../vendor/flexslider/flexslider.css" type="text/css" media="screen" charset="utf-8"> -->
+    <link rel="icon" href="data:;base64,=">
+    <style type="text/css" media="screen">
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+</head>
+
+<body ng-controller="videoController" data-ng-init="init()">
+    <!-- <video id="mini-video" autoplay muted></video> -->
+    <video id="remote-video" autoplay></video>
+    <video id="remote-screen" autoplay muted></video>
+    <!-- <flex-slider id="image-slider" slider-id="carousel" flex-slide="image in snapshots track by $index" animation="slide" animation-loop="false" item-width="120" item-margin="5" as-nav-for="#slider" slideshow="false" control-nav="false" class="hidden">
+        <li style="position:relative">
+          <img data-ng-src="{{image.data}}" />
+          <button onclick="deleteImage($index)" class="delete-button">
+              <img src="../../images/delete1.png" border="0" alt="delete">
+          </button>
+        </li>
+    </flex-slider> -->
+    <video id="local-video" autoplay muted></video>
+    <div id="progress" style="text-align: center;" class="hidden">
+        <span style="display: inline-block;vertical-align: middle;">
+            <font size= "5" color="green">Transfering...</font>
+        </span>
+    </div>
+    <div id="no-video" style="text-align: center;" class="hidden">
+        <span style="display: inline-block;vertical-align: middle;">
+            <font size= "5" color="white">The farend does not share camera</font>
+        </span>
+    </div>
+    <canvas id="snapshot"></canvas>
+    <ot-whiteboard id="whiteboard" on-exit="onWhiteboardExit()" room={{room}} user={{user}}></ot-whiteboard>
+</body>
+<footer>
+    <div id="status-div"></div>
+    <div id="screen-div" class="hidden">
+        <!-- link for screen sharing -->
+        <a ng-click="openScreenWindow(); $event.preventDefault();">Sharing screen</a>
+    </div>
+    <div id="sharing-div">
+      <div id="room-link">Waiting for someone to join this room: <a ng-click="copyLink(); $event.preventDefault();" id="room-link-href" target="_blank"></a></div>
+    </div>
+    <div id="rejoin-div" class="hidden"><span>You have left the call.</span> <button id="rejoin-button">REJOIN</button></div>
+</footer>
+<div id="icons">
+    <svg id="conference-call" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Conference</title>
+        </circle>
+		<path d="M20.75 33.355469L15.347656 33.355469L15.347656 38.757812C15.347656 39.253906 14.945312 39.660156 14.445312 39.660156L13.542969 39.660156C13.046875 39.660156 12.644531 39.257812 12.644531 38.757812L12.644531 33.355469L7.2421880000000005 33.355469C6.746094 33.355469 6.339844 32.953125 6.339844 32.457031L6.339844 31.554688C6.339844 31.058594 6.742188 30.652344 7.2421880000000005 30.652344L12.644531 30.652344L12.644531 25.25C12.644531 24.753906 13.042969 24.351562 13.542969 24.351562L14.445312 24.351562C14.941406 24.351562 15.347656 24.75 15.347656 25.25L15.347656 30.652344L20.75 30.652344C21.246094 30.652344 21.648438 31.054688 21.648438 31.554688L21.648438 32.457031C21.648438 32.953125 21.246094 33.355469 20.75 33.355469zM20.75 33.355469" fill="white"/>
+		<path d="M39.660156 31.695312C39.660156 32.144531 39.632812 32.589844 39.589844 33.027344L37.402344 33.027344C37.40625 32.90625 37.421875 32.789062 37.421875 32.667969C37.421875 27.289062 33.253906 23.382812 28.265625 22.148438C28.265625 22.09375 28.273438 22.039062 28.273438 21.984375C28.273438 21.667969 28.242188 21.359375 28.207031 21.046875C28.691406 20.957031 29.570312 20.660156 29.800781 20.566406C32.054688 19.628906 33.640625 17.410156 33.640625 14.816406C33.640625 11.628906 31.242188 9.003906 28.148438 8.636719C28.003906 8.484375 27.855469 8.347656 27.703125 8.203125C27.617188 7.546875 27.417969 6.925781 27.121094 6.363281C27.246094 6.355469 27.367188 6.339844 27.496094 6.339844C32.160156 6.339844 35.941406 10.109375 35.941406 14.765625C35.941406 17.503906 34.625 19.929688 32.597656 21.464844C36.660156 23.277344 39.660156 26.945312 39.660156 31.695312zM39.660156 31.695312" fill="white"/>
+		<path d="M33.664062 33.042969L31.421875 33.042969C31.011719 27.675781 26.527344 23.394531 21.054688 23.394531C19.53125 23.394531 18.089844 23.734375 16.789062 24.328125L14.980469 22.636719C15.511719 22.34375 16.066406 22.089844 16.648438 21.871094C14.390625 20.34375 12.902344 17.765625 12.902344 14.835938C12.902344 10.152344 16.710938 6.355469 21.40625 6.355469C26.101562 6.355469 29.910156 10.152344 29.910156 14.835938C29.910156 17.855469 28.320312 20.496094 25.941406 22.003906C30.351562 23.8125 33.433594 28.046875 33.664062 33.042969zM27.75 14.859375C27.75 11.375 24.921875 8.554688 21.4375 8.554688C17.949219 8.554688 15.121094 11.378906 15.121094 14.859375C15.121094 18.015625 17.441406 20.621094 20.464844 21.089844C20.707031 21.121094 21.152344 21.246094 22.253906 21.113281C25.351562 20.710938 27.75 18.070312 27.75 14.859375zM27.75 14.859375" fill="white"/>
+    </svg>
+    <svg id="mute-audio" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Mute audio</title>
+        </circle>
+        <path class="on" transform="scale(0.6), translate(17,18)" d="M38 22h-3.4c0 1.49-.31 2.87-.87 4.1l2.46 2.46C37.33 26.61 38 24.38 38 22zm-8.03.33c0-.11.03-.22.03-.33V10c0-3.32-2.69-6-6-6s-6 2.68-6 6v.37l11.97 11.96zM8.55 6L6 8.55l12.02 12.02v1.44c0 3.31 2.67 6 5.98 6 .45 0 .88-.06 1.3-.15l3.32 3.32c-1.43.66-3 1.03-4.62 1.03-5.52 0-10.6-4.2-10.6-10.2H10c0 6.83 5.44 12.47 12 13.44V42h4v-6.56c1.81-.27 3.53-.9 5.08-1.81L39.45 42 42 39.46 8.55 6z" fill="white" />
+        <path class="off" transform="scale(0.6), translate(17,18)" d="M24 28c3.31 0 5.98-2.69 5.98-6L30 10c0-3.32-2.68-6-6-6-3.31 0-6 2.68-6 6v12c0 3.31 2.69 6 6 6zm10.6-6c0 6-5.07 10.2-10.6 10.2-5.52 0-10.6-4.2-10.6-10.2H10c0 6.83 5.44 12.47 12 13.44V42h4v-6.56c6.56-.97 12-6.61 12-13.44h-3.4z" fill="white" />
+    </svg>
+    <svg id="mute-video" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Mute video</title>
+        </circle>
+        <path class="on" transform="scale(0.6), translate(17,16)" d="M40 8H15.64l8 8H28v4.36l1.13 1.13L36 16v12.36l7.97 7.97L44 36V12c0-2.21-1.79-4-4-4zM4.55 2L2 4.55l4.01 4.01C4.81 9.24 4 10.52 4 12v24c0 2.21 1.79 4 4 4h29.45l4 4L44 41.46 4.55 2zM12 16h1.45L28 30.55V32H12V16z" fill="white" />
+        <path class="off" transform="scale(0.6), translate(17,16)" d="M40 8H8c-2.21 0-4 1.79-4 4v24c0 2.21 1.79 4 4 4h32c2.21 0 4-1.79 4-4V12c0-2.21-1.79-4-4-4zm-4 24l-8-6.4V32H12V16h16v6.4l8-6.4v16z" fill="white" />
+    </svg>
+    <svg id="fullscreen" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Enter fullscreen</title>
+        </circle>
+        <path class="on" transform="scale(0.8), translate(7,6)" d="M10 32h6v6h4V28H10v4zm6-16h-6v4h10V10h-4v6zm12 22h4v-6h6v-4H28v10zm4-22v-6h-4v10h10v-4h-6z" fill="white" />
+        <path class="off" transform="scale(0.8), translate(7,6)" d="M14 28h-4v10h10v-4h-6v-6zm-4-8h4v-6h6v-4H10v10zm24 14h-6v4h10V28h-4v6zm-6-24v4h6v6h4V10H28z" fill="white" />
+    </svg>
+    <svg id="screen-sharing" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Share screen</title>
+        </circle>
+        <path transform="translate(10,10)" d="M 6.226562 1.851562 L 6.226562 6.695312 L 8.292969 6.695312 L 8.292969 3.921875 L 27.953125 3.921875 L 27.953125 16.011719 L 25.167969 16.011719 L 25.167969 18.082031 L 30.019531 18.082031 L 30.019531 1.851562 Z M 6.226562 1.851562 " fill="white" />
+        <path transform="translate(10,10)" d="M 23.796875 24.308594 L 23.789062 8.078125 L 0 8.078125 L 0 24.308594 L 9.378906 24.308594 L 9.378906 25.8125 L 7.351562 25.8125 L 7.351562 28.167969 L 16.441406 28.167969 L 16.441406 25.8125 L 14.417969 25.8125 L 14.417969 24.308594 Z M 2.070312 22.238281 L 2.070312 10.148438 L 21.726562 10.148438 L 21.726562 22.238281 Z M 2.070312 22.238281 " fill="white" />
+    </svg>
+
+    <svg id="flip-camera" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Flip camera</title>
+        </circle>
+        <path d="M14.25374314276777,23.82073239504868 L20.004244234837316,26.148923255399822 L17.54024231679902,27.488723932583156 C18.844346564590257,29.942227390800237 21.40354463100737,31.625020362142443 24.375740380391182,31.625020362142443 C27.518742426866176,31.625020362142443 30.21793888089913,29.754623893995106 31.43944656009698,27.07083443969977 L33.7032402215448,27.07083443969977 C32.36694444430178,30.941127373789072 28.696141706815183,33.73484692621231 24.375740380391182,33.73484692621231 C20.609742544525744,33.73484692621231 17.33864624023218,31.611732962368727 15.675446968556297,28.500955415344954 L13.076344072818756,29.912149091312468 zM24.375740380391182,13.989247262477875 C28.09903891698378,13.989247360379432 31.33514516187322,16.066154017108364 33.01584443325108,19.117437935145308 L35.47634369134903,17.702741039237452 L34.44803740886098,23.82073239504868 L28.64223960773313,21.63045623234886 L31.1783458645435,20.17303420716861 C29.86444658691907,17.754544608355243 27.32274313020402,16.099051986548112 24.375740380391182,16.099051846548114 C21.234141833892288,16.099051986548112 18.534945589859326,17.969449364695436 17.312744420673287,20.652532449002802 L15.049643969213658,20.652532449002802 C16.385946186456568,16.782239654913496 20.056742063943283,13.989247360379432 24.375740380391182,13.989247262477875 z" fill="white" />
+    </svg>
+<!--     <svg id="slider" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Slide</title>
+        </circle>
+        <path transform="scale(0.1), translate(70,70)" d="M0,18.769v299.563h337.1V18.769H0z M66.225,287.435H30.727v-35.496h35.498V287.435z M66.225,220.015H30.727v-35.496h35.498
+    V220.015z M66.225,152.593H30.727v-35.49h35.498V152.593z M66.225,85.167H30.727V49.679h35.498V85.167z M306.368,287.435h-35.495
+    v-35.496h35.495V287.435z M306.368,220.015h-35.495v-35.496h35.495V220.015z M306.368,152.593h-35.495v-35.49h35.495V152.593z
+     M306.368,85.167h-35.495V49.679h35.495V85.167z" fill="white"/>
+    </svg> -->
+    <svg id="capture" class="hidden" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Take snapshot</title>
+        </circle>
+        <path d="M19.700560959680317,9.681472589151724 l-2.652474022710339,2.9908847053624092 H12.332577563262703 c-1.620956347211874,0 -2.9471933585670436,1.3458981174130842 -2.9471933585670436,2.9908847053624092 v17.945308232174455 c0,1.644986587949325 1.3262370113551696,2.9908847053624092 2.9471933585670436,2.9908847053624092 h23.57754686853635 c1.620956347211874,0 2.9471933585670436,-1.3458981174130842 2.9471933585670436,-2.9908847053624092 v-17.945308232174455 c0,-1.644986587949325 -1.3262370113551696,-2.9908847053624092 -2.9471933585670436,-2.9908847053624092 h-4.7155093737072695 l-2.652474022710339,-2.9908847053624092 H19.700560959680317 zM24.121350997530882,32.11310787936981 c-4.126070701993862,0 -7.367983396417609,-3.28997317589865 -7.367983396417609,-7.477211763406023 c0,-4.187238587507373 3.241912694423748,-7.477211763406023 7.367983396417609,-7.477211763406023 c4.126070701993862,0 7.367983396417609,3.28997317589865 7.367983396417609,7.477211763406023 C31.489334393948496,28.82313470347114 28.24742169952475,32.11310787936981 24.121350997530882,32.11310787936981 z" fill="white" />
+    </svg>
+    <svg id="hangup" class="hidden" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+        <circle cx="24" cy="24" r="34">
+            <title>Hangup</title>
+        </circle>
+        <path transform="scale(0.7), translate(11,10)" d="M24 18c-3.21 0-6.3.5-9.2 1.44v6.21c0 .79-.46 1.47-1.12 1.8-1.95.98-3.74 2.23-5.33 3.7-.36.35-.85.57-1.4.57-.55 0-1.05-.22-1.41-.59L.59 26.18c-.37-.37-.59-.87-.59-1.42 0-.55.22-1.05.59-1.42C6.68 17.55 14.93 14 24 14s17.32 3.55 23.41 9.34c.37.36.59.87.59 1.42 0 .55-.22 1.05-.59 1.41l-4.95 4.95c-.36.36-.86.59-1.41.59-.54 0-1.04-.22-1.4-.57-1.59-1.47-3.38-2.72-5.33-3.7-.66-.33-1.12-1.01-1.12-1.8v-6.21C30.3 18.5 27.21 18 24 18z" fill="white" />
+    </svg>
+</div>
+
+</html>

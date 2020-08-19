@@ -1,0 +1,15 @@
+<div id="home" data-ng-init="load()" >
+    <!-- Navigation -->
+    <div class="alert alert-info" ng-show="loading">Processing...</div>
+    <p>Create new room and embed the link in your home page for <strong><a href="#" ng-click="openSettings('', 'Support');$event.preventDefault(); $event.stopPropagation();">Support</a></strong> or <strong><a href="#" ng-click="openSettings('', 'Sales');$event.preventDefault(); $event.stopPropagation();">Sales</a></strong>:</p>
+	<p>Support - let your clients to stream real-time video to you. so you can watch it instantly.</p>
+	<p>Sales - let your clients to see your real-time video stream to you.</p>
+	<p ng-show="new>0">You have new messages:</p>
+	<ul class="list-unstyled">
+        <li ng-repeat="room in rooms">
+        	<p ng-show="room.NewMessage>0">
+        	<a href="#" ng-click="openMessages(room.Id);$event.preventDefault(); $event.stopPropagation();"><span class="badge badge-danger">{{room.NewMessage}}</span></a> message(s) on <a href="#" ng-click="openSettings(room.Id, '');$event.preventDefault(); $event.stopPropagation();">{{room.Name}}</a>
+        	</p>
+        </li>
+    </ul>
+</div>

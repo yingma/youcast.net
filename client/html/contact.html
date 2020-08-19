@@ -1,0 +1,16 @@
+<div id="confirm-join-div" ng-show="os_string !== ''">
+    <div>Ready to join<span id="confirm-join-room-span"></span></div>
+    <label>Are you a presenter?</label>
+    <div class="btn-group">
+        <label class="btn btn-primary" ng-model="is_presenter" uib-btn-radio="true">YES</label>
+        <label class="btn btn-primary" ng-model="is_presenter" uib-btn-radio="false">NO</label>
+    </div>
+    <div>
+    <button id="confirm-join-button" ng-click="join()">Join now</button>
+    <button id="join-later-button" ng-click="close()">Join later</button>
+    </div>
+</div>
+<div ng-hide="os_string !== ''">
+    <img src="images/construction.jpg" alt="under construction">
+    <h1>Not support your device yet</h1> 
+</div>

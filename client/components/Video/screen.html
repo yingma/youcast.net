@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html ng-app="webrtc">
+
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Screen Sharing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-route.min.js"></script>
+    <script src="../../vendor/adapter.min.js" type="text/javascript" charset="utf-8"></script>
+<!--     <script src="../../vendor/flexslider/angular-flexslider.js" type="text/javascript" charset="utf-8"></script> -->
+    <script src="constants.js" type="text/javascript" charset="utf-8"></script>
+    <script src="sdputils.js" type="text/javascript" charset="utf-8"></script>
+    <script src="signalingchannel.js" type="text/javascript" charset="utf-8"></script>
+    <script src="peerconnectionclient.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../../js/events.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/environment-dev.js"></script>
+    <script src="../../js/util.js"></script>
+    <script src="../../vendor/aws/aws-sdk-2.4.9.min.js"></script>
+    <script src="call.js" type="text/javascript" charset="utf-8"></script>
+    <script src="screen.js" type="text/javascript" charset="utf-8"></script>
+    <script src="windowport.js" type="text/javascript" charset="utf-8"></script>
+    <script src="events.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="../../css/video.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="icon" href="data:;base64,=">
+    <style type="text/css" media="screen">
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+</head>
+<body ng-controller="screenController">
+    <video id="remote-video" autoplay></video>
+    <div id="progress" style="text-align: center;" class="hidden">
+        <span style="display: inline-block;vertical-align: middle;">
+            <font size= "5" color="green">Screen session is closed</font>
+        </span>
+    </div>
+</body>
+</html>

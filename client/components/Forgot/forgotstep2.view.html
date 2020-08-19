@@ -1,0 +1,43 @@
+<form name="forgot" ng-submit="confirmNewPassword()">
+  <div id="room-selection" style="width: 350px;">
+    <div class="list list-inset" id="room-id-input-div">
+    <p id="instructions">Check your email then enter verification code received from email and new password</p>
+    <input ng-hide="user.email!=''" type="text" name="username" ng-model="user.email"
+      placeholder="sample.@mail.com"
+      ng-required="user.email=''">
+    <input type="text" name="code" ng-model="user.code"
+      placeholder="Code" required>
+    <input
+        type="password"
+        name="password"
+        ng-model="user.password"
+        ng-minlength="8"
+        placeholder="New Password"
+        required>
+    <div ng-messages="forgot.username.$error" ng-if="forgot.username.$touched">
+      <p ng-message="required">* Email is required</p>
+    </div>
+
+    <div ng-messages="forgot.code.$error" ng-if="forgot.code.$touched">
+      <p ng-message="required">* Code is required</p>
+    </div>
+
+    <div ng-messages="forgot.password.$error" ng-if="forgot.password.$touched">
+        <p ng-message="required">* Password is required</p>
+        <p ng-message="minlength">* Password must be longer than 8 characters</p>
+    </div>
+
+    <div class="error" ng-show="error.message">
+      {{ error.message }}
+    </div>
+
+    <div id="room-id-input-buttons">
+      <button
+        type="button"
+        ng-click="confirmNewPassword()"
+        ng-disabled="forgot.$invalid">
+        <span>Save changes</span>
+      </button>
+    </div>
+  </div>
+</form>

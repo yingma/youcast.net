@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html ng-app="starter.ring">
+<head>
+  <base href=".">
+  <meta charset="utf-8">
+  <meta name="description" content="Youcast Pro">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <meta itemprop="description" content="Whiteboard application using webrtc technology">
+  <meta itemprop="image" content="images/webrtc-icon-192x192.png">
+  <meta itemprop="name" content="Ring">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta id="theme-color" name="theme-color" content="#1e1e1e">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-cookies.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-route.min.js"></script>
+  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="../../../pro/vendor/aws/aws-sdk-2.4.9.min.js"></script>
+
+  <script src="../../js/environment-dev.js"></script>
+  <script src="../Services/awsAPIGateway1.service.js"></script>
+
+  
+  <script src="ring.controller.js"></script>
+
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="data:;base64,=">
+  <link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" charset="utf-8">
+  
+  <style type="text/css" media="screen">
+  body {
+      margin: 0;
+      padding: 0;
+  }
+  </style>
+</head>
+<body>
+
+
+<audio id="ringplayer" autoplay hidden loop>
+  <source src="../../audio/ring.wav" type="audio/wav">
+           Audio unsupported !! 
+</audio>
+
+
+<!-- Page Content -->
+<!-- views will be injected here -->
+
+<div id="room-selection" style="width: 350px;vertical-align: middle;" ng-controller="ringCtrl" data-ng-init="onload()">
+    <div>
+        <img src="../../images/ring.gif" ng-show="!error.message">
+        <img src="../../images/arrow.png" border="0">
+        <img ng-src="{{logo}}" alt="logo" border="0" width="75px" height="75px" ng-show="logo">
+        <br>
+        <h2 ng-show="!error.message">Ring....</h2>
+    </div>
+    <div class="alert alert-danger" ng-show="error.message">
+      {{ error.message }}
+    </div>
+    <div id="room-id-input-buttons">
+        <button id="hangup-button" ng-click="hangup()" ng-show="!error.message" ng-disabled="!canHangup">Hangup</button>
+    </div>
+    <div ng-if="data-loading">
+        Loading...
+    </div>
+</div>
+
+<!-- End Content -->
+
+<!-- Footer -->
+<footer>
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Copyright &copy; Youcast.net 2018</p>
+    </div>
+  </div>
+  <!-- /.container -->
+</footer>
+
+</body>
+</html>

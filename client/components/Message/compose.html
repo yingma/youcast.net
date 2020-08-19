@@ -1,0 +1,29 @@
+
+<div class="modal-header">
+    <h4 class="modal-title">Compose invite</h4>
+</div>
+<div class="modal-body">
+    <form role="composeForm" class="form-horizontal">
+        <div class="form-group">
+            <input type="text" id="telephone" name="telephone" data-ng-model="number" ng-intl-tel-input>
+            <label class="error-label" for="telephone" ng-show="composeForm.telephone.$invalid && composeForm.telephone.$touched">Invalid Phone Number</label>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Message</label>
+            <div class="col-lg-10">
+                <textarea rows="4" cols="20" class="form-control" name="message" data-ng-model="message"></textarea>
+            </div>
+            <br>
+            <!-- Default unchecked -->
+            <div class="col-lg-10 custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="linkcheckbox" data-ng-model="checklink">
+                <label class="custom-control-label" for="linkcheckbox">Send realtime video conference link</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button ng-disabled="composeForm.$invalid" class="btn btn-send" type="submit" ng-click="ok()">Send</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>
+ 

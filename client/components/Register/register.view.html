@@ -1,0 +1,65 @@
+<form name="signupform" ng-submit="register()">
+  <div id="room-selection" style="width: 350px;">
+    <h1><font color="orange" face="Bradley Hand">Sign up</font></h1>
+    <div class="list list-inset" id="room-id-input-div">
+    <p id="instructions">Create Account</p>
+      <label class="item item-input">
+      <input
+        type="email"
+        name="email"
+        ng-model="user.email"
+        ng-minlength="5"
+        placeholder="youremail@example.com"
+        required>
+      </label>
+      <label class="item item-input">
+      <input
+        type="password"
+        name="password"
+		placeholder="password"
+        ng-model="user.password"
+        ng-minlength="8"
+        required>
+      </label>
+      <label class="item item-input"><label class="item item-input">
+      <input type="password" name="confirmPassword"
+	    placeholder="re-type password"
+        ng-model="user.confirmPassword"
+        required compare-to="user.password" />
+      </label>
+    <div class="list list-inset" id="room-id-input-div">
+      <div ng-messages="signupform.email.$error" ng-if="signupform.email.$touched" style="color:red">
+        <p ng-message="required">* Email is required</p>
+        <p ng-message="minlength">* Email must be longer than 5 characters</p>
+      </div>
+
+      <div ng-messages="signupform.password.$error" ng-if="signupform.password.$touched" style="color:red">
+        <p ng-message="required">* Password is required</p>
+        <p ng-message="minlength">* Password must be longer than 8 characters</p>
+      </div>
+      <div ng-messages="signupform.confirmPassword.$error" ng-if="signupform.confirmPassword.$touched" style="color:red">
+        <p ng-message="required">* Passwords don't match</p>
+      </div>
+
+      <div class="padding">
+        <div class="alert alert-danger" ng-show="error.message">
+          {{ error.message }}
+        </div>
+      </div>
+
+    <div id="room-id-input-buttons">
+      <button type="submit"
+        ng-disabled="signupform.$invalid">
+        <span>Register</span>
+      </button>
+      <button type="button" ng-click="goback()">
+        <span>Back</span>
+      </button>
+    </div>
+    <div ng-if="data-loading">
+      Loading...
+    </div>
+
+  </div>
+
+</form>

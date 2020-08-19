@@ -1,0 +1,34 @@
+<form name="forgot" ng-submit="forgotPassword()">
+  <div id="room-selection" style="width: 350px;">
+    <div class="list list-inset" id="room-id-input-div">
+      <p id="instructions">Enter your email</p>
+      <input type="email" name="email" ng-model="user.email"
+        placeholder="youremail@example.com"
+        required>
+      <div ng-messages="forgot.email.$error" ng-if="forgot.email.$touched">
+        <p ng-message="required">* Email is required</p>
+      </div>
+
+      <div class="error" ng-show="error.message">
+        {{ error.message }}
+      </div>
+    </div>
+    <div vc-recaptcha theme="'light'"
+                key="recaptchaKey"
+                on-create="setWidgetId(widgetId)"
+                on-success="setResponse(response)"
+                on-expire="cbExpiration()" required></div>
+
+      <div id="room-id-input-buttons">
+        <button
+          type="button"
+          ng-click="forgotPassword()"
+          ng-disabled="forgot.$invalid">
+          <span>Continue</span>
+        </button>
+		<button type="button" onclick=" window.history.back();">
+		  <span>Back</span>
+        </button>
+      </div>
+  </div>
+</form>

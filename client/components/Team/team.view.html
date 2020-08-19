@@ -1,0 +1,96 @@
+<form name="settings">
+    <div id="setting-selection">
+        <h2>Team</h2>
+        <script type="text/javascript">
+            var sortingOrder = 'Name';
+            var sortingOrder1 = 'Name';
+        </script>
+        <div id="column-left">
+            <div class="input-append">
+                <input type="text" id="searchbox" ng-model="query" ng-keypress="keyPress($event);" class="search-query" placeholder="Search by name or email or number">
+            </div>
+            <table class="table table-striped table-condensed table-hover table-responsive table-fix">
+                <thead style="background-color:silver;">
+                    <tr>
+                        <th class="id"></th>
+                        <th class="name">Name<a ng-click="sort_by('Name', '0')">
+                            <i ng-class="sortingOrder==='Name' && !reverse?'icon-chevron-up':sortingOrder==='Name' && reverse?'icon-chevron-down':'icon-sort'"></i></a></th>
+                        <th class="email">Email<a ng-click="sort_by('Email', '0')">
+                            <i ng-class="sortingOrder==='Email' && !reverse?'icon-chevron-up':sortingOrder==='email' && reverse?'icon-chevron-down':'icon-sort'"></i></a></th>
+                        <th class="number">Phone<a ng-click="sort_by('Phone', '0')">
+                            <i ng-class="sortingOrder==='Phone' && !reverse?'icon-chevron-up':sortingOrder==='Phone' && reverse?'icon-chevron-down':'icon-sort'"></i></a></th>
+                        <th class="city">City<a ng-click="sort_by('City', '0')">
+                            <i ng-class="sortingOrder==='City' && !reverse?'icon-chevron-up':sortingOrder==='City' && reverse?'icon-chevron-down':'icon-sort'"></i></a></th>
+                    </tr>
+                </thead>
+                <tbody class="scroll" infinite-scroll="loadMore()" infinite-scroll-disabled='busy' infinite-scroll-distance="1">
+                    <tr ng-repeat="item in users | orderBy:sortingOrder:reverse">
+                        <td><input id="checkUser" type="checkbox" ng-model="item.Selected"></td>
+                        <td>{{item.Name}}</td>
+                        <td>{{item.Email}}</td>
+                        <td>{{item.Phone}}</td>
+                        <td>{{item.City}}</td>
+                    </tr>
+                </tbody>
+                <tfoot ng-if="!users || users.length === 0" style="background-color:white;">
+                    <tr>
+                        <td colspan='5' ng-switch on="busy">
+                            <div ng-switch-when="true">
+                                Loading data...
+                            </div>
+                            <div ng-switch-default>
+                                No user found.
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="column-center" >
+            <div class="buttoncolumn">
+                <button id ="addbutton" class="btn" ng-click="addTeam()"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                <button id ="removebutton" class="btn" ng-click="removeTeam()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+            </div>
+        </div>
+        <div id="column-right" data-ng-init="init()">
+            <div><h4>Team member</h4></div>
+            <table class="table table-striped table-condensed table-hover table-fix">
+                <thead style="background-color:silver;">
+                    <tr>
+                        <th class="id"></th>
+                        <th class="name">Name<a ng-click="sort_by('Name', '1')">
+                            <i ng-class="sortingOrder1==='Name' && !reverse1?'icon-chevron-up':sortingOrder1==='Name' && reverse1?'icon-chevron-down':'icon-sort'"></i></a></th>
+                        <th class="email">Email<a ng-click="sort_by('Email', '1')">
+                            <i ng-class="sortingOrder1==='Email' && !reverse1?'icon-chevron-up':sortingOrder1==='Email' && reverse1?'icon-chevron-down':'icon-sort'"></i></a></th>
+                        <th class="number">Phone<a ng-click="sort_by('Phone', '1')">
+                            <i ng-class="sortingOrder1==='Phone' && !reverse1?'icon-chevron-up':sortingOrder1==='Phone' && reverse1?'icon-chevron-down':'icon-sort'"></i></a></th>
+                        <th class="city">City<a ng-click="sort_by('City', '1')">
+                            <i ng-class="sortingOrder1==='City' && !reverse1?'icon-chevron-up':sortingOrder1==='city' && reverse1?'icon-chevron-down':'icon-sort'"></i></a></th>
+                    </tr>
+                </thead>
+                <tbody class="scroll" infinite-scroll="loadMore()" infinite-scroll-disabled='busy' infinite-scroll-distance="1">
+                    <tr ng-repeat="item in team | orderBy:sortingOrder1:reverse1">
+                        <td><input id="checkUser" type="checkbox" ng-model="item.Selected"></td>
+                        <td>{{item.Name}}</td>
+                        <td>{{item.Email}}</td>
+                        <td>{{item.Phone}}</td>
+                        <td>{{item.City}}</td>
+                    </tr>
+                </tbody>
+                <tfoot ng-if="!team || team.length === 0 || loading" style="background-color:white;">
+                    <tr>
+                        <td colspan='5' ng-switch on="loading">
+                            <div ng-switch-when="true">
+                                Loading data...
+                            </div>
+                            <div ng-switch-default>
+                                No other team member.
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</form>
+

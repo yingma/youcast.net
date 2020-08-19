@@ -1,0 +1,45 @@
+<form class="form-inline my-2 my-lg-0">
+    <div id="setting-selection" data-ng-init="loadMore()">    
+        <h2>Inbox</h2>
+        <button class="btn btn-danger" ng-click="compose()" type=button><i class="fa fa-edit"></i>Compose</button>
+        <label style="width:60%;">
+        <input class="ml-sm-4" type="text" placeholder="Search name or email or number" data-ng-model="query" width="70%">
+        </label>
+        <button class="btn btn-primary my-2 my-sm-0" type=submit ng-click="search()"><i class="fa fa-search" aria-hidden="true">Search</i></button>
+    </div>
+</form>
+<div id="inbox">
+    <div data-ng-show="subscribers.length === 0 && !busy">
+        <td class="center" colspan="3">No subscriber is here</td>
+    </div>
+    <ul infinite-scroll="loadMore()" infinite-scroll-disabled='busy' infinite-scroll-distance="1">
+        <li ng-repeat="subscriber in subscriberFilter = (subscribers | limitTo:numberToDisplay) track by $index" ng-class="{highlight:subscriber.NewMessage>0}" class="list-group-item d-flex justify-content-start" ng-click="open(subscriber)"> 
+            <span ng-style="{true: {'font-weight':'bold'}, false: {}}[subscriber.NewMessage>0]" class="fixed-name-column-width">
+				<label>Name:</label>
+                {{subscriber.Name}}
+            </span>
+            <span ng-style="{true: {'font-weight':'bold'}, false: {}}[subscriber.NewMessage>0]" class="fixed-number-column-width">
+                <button class="btn btn-link" role="link" ng-click="compose(subscriber.Number, subscriber.Key, subscriber.User)">
+				<label>Number:</label>
+                {{subscriber.Number}}
+                </button>
+            </span>
+            <span ng-style="{true: {'font-weight':'bold'}, false: {}}[subscriber.NewMessage>0]" class="fixed-email-column-width">
+				<label>Email:</label>
+                {{subscriber.Email}}
+            </span>
+            <span ng-style="{true: {'font-weight':'bold'}, false: {}}[subscriber.NewMessage>0]">
+				<label>Notes:</label>
+                {{subscriber.message}}
+            </span>
+            <span class="fixed-date-column-width" style="float:right;font-size: 12px;">
+                {{subscriber.Date}}
+            </span>
+            <div class='pics_in_a_row' ng-show="subscriber.snapshots.length > 0" ng-init="snapshots=subscriber.snapshots" ng-include="'/pro/components/Message/inbox.partial.view.html'">
+            </div>  
+            <div style='clear: both;'></div>
+        </li>
+        <div ng-show='busy'>Loading data...</div>
+    </ul>
+</div>
+

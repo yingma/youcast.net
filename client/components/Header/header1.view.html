@@ -1,0 +1,18 @@
+
+<div class="navbar-header">
+    <a class="navbar-brand" ui-sref="#"><img src="images/logo2.png" alt="Youcast"></a>
+</div>
+
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="HeaderCtrl">
+    <ul class="nav navbar-nav navbar-right">
+      <li style="vertical-align: middle;"><a>Sign in as:&nbsp;{{user.email}}</a></li>
+      <li>
+        <a ui-sref="settings">Settings&nbsp;<span class="badge badge-warning" data-toggle="tooltip" title="Please verify phone number" ng-show="!user.verified">!</span></a>
+      </li>
+      <li> <br></li>
+      <li>
+        <a href="" ng-click="logout()">Logout</a>
+      </li>
+    </ul>
+</div>
+<!-- /.navbar-collapse -->

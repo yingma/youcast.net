@@ -1,0 +1,65 @@
+<div class="sidebar-header">
+    <h3>Video Room
+        <a ng-click="toggleSidebar()" class="btn btn-link pull-right">
+            <i class="glyphicon glyphicon-remove"></i>
+        </a>
+    </h3>
+    <strong>
+        <a ng-click="toggleSidebar()" class="btn btn-link">
+            <i class="glyphicon glyphicon-align-justify"></i>
+        </a>
+    </strong>             
+</div>
+
+<ul class="list-unstyled components">
+    <li>
+        <a href="#" ng-click="openSettings(''); $event.preventDefault(); $event.stopPropagation();">
+            <i class="glyphicon glyphicon-plus-sign"></i>
+        New Room
+        </a>
+    </li>
+    <li ng-repeat="room in rooms" ng-class="active">
+        <a href='#{{room.Id}}' data-toggle="collapse" aria-expanded="false">
+            <i class="glyphicon glyphicon-facetime-video"></i>
+            <span ng-style="{true: {'font-weight':'bold'}, false: {}}[room.NewMessage>0]">
+            {{room.Name}}
+            </span>
+            <br>
+            <small>{{room.Description}}</small>
+        </a>
+        <ul class="collapse list-unstyled" id="{{room.Id}}">
+            <li><a href="#" ng-click="openSettings(room.Id); $event.preventDefault(); $event.stopPropagation();">Settings</a></li>
+            <li><a href="#" ng-click="openTeam(room.Id); $event.preventDefault(); $event.stopPropagation();">Team</a></li>
+            <li>
+                <a href="#" ng-click="openMessages(room.Id); $event.preventDefault(); $event.stopPropagation();">
+                    <span ng-style="{true: {'font-weight':'bold'}, false: {}}[room.NewMessage>0]">Messages</span>
+                    <span class="badge badge-danger" ng-show="room.NewMessage>0">{{room.NewMessage}}</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a ui-sref="howto">
+            <i class="glyphicon glyphicon-list-alt"></i>
+            How-to
+        </a>
+    </li>
+    <li>
+        <a ui-sref="faqs">
+            <i class="glyphicon glyphicon-paperclip"></i>
+            FAQ
+        </a>
+    </li>
+    <li>
+        <a ui-sref="contact">
+            <i class="glyphicon glyphicon-send"></i>
+            Contact
+        </a>
+    </li>
+    <li>
+        <a ui-sref="about">
+            <i class="glyphicon glyphicon-briefcase"></i>
+            About
+        </a>
+    </li>
+</ul>

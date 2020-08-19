@@ -1,0 +1,25 @@
+<form name="phoneconfirm" ng-submit="confirmPhone()">
+    <div id="setting-selection">
+    <div class="list list-inset" id="room-id-input-div">
+        <p id="instructions">Check your sms text then enter verification code received</p>
+        <br>
+        <div>
+            <label class="item item-input">
+                <input type="text" name="code" id="code" placeholder="Verification Code" ng-model="user.code" required>
+            </label>
+            <div ng-messages="phoneconfirm.code.$error" ng-if="phoneconfirm.code.$touched" style="color:red">
+                <p ng-message="required">* Code is required</p>
+            </div>
+        </div>
+        <div class="alert alert-danger" ng-show="error.message1">
+            {{ error.message1 }}
+        </div>
+        <div id="room-id-input-buttons">
+            <button type="submit" ng-disabled="phoneconfirm.code.$invalid"><span>Verify</span></button>
+            <button type="button" ng-click="resendCode()"><span>Resend code</span></button>
+        </div>
+        <div ng-if="data-loading">
+            Loading...
+        </div>
+    </div>
+</form>

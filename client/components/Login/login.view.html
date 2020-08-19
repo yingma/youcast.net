@@ -1,0 +1,43 @@
+<form name="loginform" ng-submit="signIn(loginform)" ng-init="userLogged()">
+  <div id="room-selection" style="width: 350px;">
+    <div class="list list-inset" id="room-id-input-div">
+      <label class="item item-input">
+        <input type="email" name="email" id="email" autofocus ng-model="user.email"
+          placeholder="youremail@example.com"
+          required>
+      </label>
+      <label class="item item-input">
+        <input type="password" name="password" id="password" placeholder="password" ng-model="user.password"
+          required>
+      </label>
+    </div>
+
+    <div ng-messages="loginform.email.$error" ng-if="loginform.email.$touched && loginform.email.$invalid" style="color:red">
+      <p ng-message="required">* Email is required</p>
+      <p ng-message="minlength">* Email must be longer than 5 characters</p>
+    </div>
+
+    <div ng-messages="loginform.password.$error" ng-if="loginform.password.$touched && loginform.password.$invalid" style="color:red">
+      <p ng-message="required">* Password is required</p>
+      <p ng-message="minlength">* Password must be longer than 6 characters and include special symbol</p>
+    </div>
+    <div class="alert alert-danger" ng-show="error.message">
+      {{ error.message }}
+    </div>
+    <div id="room-id-input-buttons">
+      <button type="submit"
+        ng-disabled="loginform.$invalid">
+        <span ng-show="!loading">Log In</span>
+        <i ng-show="loading"></i>
+      </button>
+      <p>
+        <span><a class="button button-small button-balanced icon-right" ui-sref="register">Register</a></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span><a class="button button-small button-dark icon-right" ui-sref="forgot">Forgot password</a></span>
+      </p>
+    </div>
+    <div ng-if="data-loading">
+      Loading...
+    </div>
+  </div>
+</form>

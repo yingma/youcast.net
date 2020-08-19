@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="starter.enter">
+<head>
+  <base href=".">
+  <meta charset="utf-8">
+  <meta name="description" content="Youcast Pro">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <meta itemprop="description" content="Whiteboard application using webrtc technology">
+  <meta itemprop="image" content="images/webrtc-icon-192x192.png">
+  <meta itemprop="name" content="Enter">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta id="theme-color" name="theme-color" content="#1e1e1e">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.2/angular-route.min.js"></script>
+  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="../../../pro/vendor/aws/aws-sdk-2.4.9.min.js"></script>
+
+  <script src="../../js/environment-dev.js"></script>
+  <script src="../Services/awsAPIGateway1.service.js"></script>
+
+  <script src="../../../pro/vendor/angular-recaptcha/angular-recaptcha.min.js"></script>
+  
+  <script src="enter.controller.js"></script>
+
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="data:;base64,=">
+  <link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" charset="utf-8">
+  
+  <style type="text/css" media="screen">
+  body {
+      margin: 0;
+      padding: 0;
+  }
+  </style>
+</head>
+<body>
+
+<!-- Page Content -->
+<!-- views will be injected here -->  
+<form name="enterForm" ng-controller="enterCtrl" data-ng-init="onload()">
+    <div id="room-selection" style="width: 350px;">
+        <div>
+          <img ng-src="{{logo}}" alt="logo" border="0" ng-show="logo">
+        </div>
+        <div>
+          <h3>
+            {{description}}
+          </h3>
+        </div>
+        <div vc-recaptcha theme="'light'"
+            key="recaptchaKey"
+            on-create="setWidgetId(widgetId)"
+            on-success="setResponse(response)"
+            on-expire="cbExpiration()" required>
+        </div>
+        <div id="room-id-input-buttons">
+            <button ng-disabled="enterForm.$invalid" id="join-button" ng-click="enter()">Enter</button>
+        </div>
+        <div ng-if="data-loading">
+            Loading...
+        </div>
+    </div>
+</form>
+<!-- End Content -->
+
+<!-- Footer -->
+<footer>
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Copyright &copy; Youcast.net 2018</p>
+    </div>
+  </div>
+  <!-- /.container -->
+</footer>
+
+</body>
+</html>
