@@ -3,5 +3,5 @@ Youcast.net is a free, open-source project that provides remote assistant and we
 ## Client
 Web frontend is built with google WEBRTC and angular.
 
-[https://www.youcast.net](Live Demo) to view it in web browser.
+[Live Demo](https://www.youcast.net) to view it in web browser.
  
